@@ -1,0 +1,3 @@
+gcc -fopenmp -o omp_tokenizer omp_tokenizer.c && ./omp_tokenizer
+
+gcc omp_tokenizer.c -o tokenizer && ./tokenizer  
