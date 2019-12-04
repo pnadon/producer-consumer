@@ -61,18 +61,21 @@ void consume_from_queue(int my_rank, char fname[]) {
 int main() {
     clock_t seconds = clock();
     // double start_time = omp_get_wtime();
-    #pragma omp parallel for
-    for( int i = 0; i < NUM_FILES; i++) {
-        initializeQueue(&queues[i]);
-        char fname[16];
-        sprintf(fname, "./texts/%d.txt", i);
-        produce_to_queue(i, fname);
-    }
-    #pragma omp parallel for
-    for( int i = 0; i < NUM_FILES; i++) {
-        char fname[16];
-        sprintf(fname, "./output/%d.txt", i);
-        consume_from_queue(i, fname);
+    #pragma omp parallel 
+    {
+        #pragma omp for schedule(static) nowait
+        for( int i = 0; i < NUM_FILES; i++) {
+            initializeQueue(&queues[i]);
+            char fname[16];
+            sprintf(fname, "./texts/%d.txt", i);
+            produce_to_queue(i, fname);
+        }
+        #pragma omp for schedule(static)
+        for( int i = 0; i < NUM_FILES; i++) {
+            char fname[16];
+            sprintf(fname, "./output/%d.txt", i);
+            consume_from_queue(i, fname);
+        }
     }
     // printf("\n\ntime: %lf\n", omp_get_wtime() - start_time);
     printf("\n\ntime: %f\n", (double)(clock() - seconds) / CLOCKS_PER_SEC);
