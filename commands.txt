@@ -1,3 +1,8 @@
 gcc -fopenmp -o omp_tokenizer omp_tokenizer.c && ./omp_tokenizer
 
 gcc omp_tokenizer.c -o tokenizer && ./tokenizer  
+
+
+gcc -fopenmp -o omp_tokenizer omp_tokenizer.c && ./omp_tokenizer | tee out.txt |  wc
+
+cat ./lorem_ipsum/0.txt ./lorem_ipsum/1.txt ./lorem_ipsum/2.txt ./lorem_ipsum/3.txt | wc
